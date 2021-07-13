@@ -1,0 +1,70 @@
+{% extends 'base.html'%}
+
+{% load static %}
+{% load base_tags %}
+
+{% block head %}
+
+{% endblock head %}
+
+{%  block nav %}
+    {% nav_bar %}
+{%  endblock nav %}
+
+{% block content %}
+    <div class="container">
+        <br>
+            <form method="POST" action="{% url 'upload_without_gt' %}" id="add_form" enctype="multipart/form-data">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <div class="row">
+                <div class="col-lg-1 align-self-center" style="text-align: center">
+                    <h5>Upload</h5>
+                </div>
+                <div class="col-lg-9 align-self-center">
+                    <label class="custom-file" >
+                        <input type="file" class="custom-file-input" id="customFile" name="image">
+                        <label class="custom-file-label" for="customFile" id="label_filename"></label>
+                    </label>
+                </div>
+                <div class="col-lg-2 align-self-center" style="text-align: center">
+                    <button class="btn btn-outline-secondary" type="submit" form="add_form">업로드</button>
+                </div>
+                </div>
+            </form>
+        <br>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th style="text-align: center; vertical-align: middle;"> Image name </th>
+                    <th style="text-align: center; vertical-align: middle;"> Date </th>
+                    <th style="text-align: center; vertical-align: middle;"> Segmentation Area </th>
+                    <th style="text-align: center; vertical-align: middle;"> Severity Threshold </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for image in images %}
+                <tr>
+                    <td> <a href="{% url 'imagedetail' image.pk %}">{{image.image}}</a> </td>
+                    <td style="text-align: center;"> {{image.uploaded_date}} </td>
+                    <td style="text-align: center;"> {{image.segmentation_area}} </td>
+                    <td style="text-align: right;"> {{image.severity_threshold}} </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
+
+{% block jquery %}
+<script>
+$("#customFile").on("change", function() {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings("#label_filename").addClass("selected").html(fileName);
+});
+</script>
+{% endblock jquery %}
+
+{% block footer %}
+    <span class="text-muted">Footer From Front Page.</span>
+{% endblock footer %}

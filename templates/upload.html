@@ -1,0 +1,47 @@
+{% extends 'base.html'%}
+
+{% load static %}
+{% load base_tags %}
+
+{% block head %}
+
+{% endblock head %}
+
+{%  block nav %}
+    {% nav_bar %}
+{%  endblock nav %}
+
+{% block content %}
+<div class="container">
+    <form method="POST" action="{% url 'upload' %}" id="add_form" enctype="multipart/form-data">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-3">
+                <h5>Test Image</h5>
+            </div>
+            <div class="col-lg-9">
+                <input type="file" name="image" id="image" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <h5>GT Image</h5>
+            </div>
+            <input type="file" name="seg_gt_image" id="seg_gt_image" />
+        </div>
+        <div class="row">
+            <button type="submit" form="add_form">Add</button>
+        </div>
+        <p>{{ image }}</p>
+    </form>
+</div>
+{% endblock content %}
+
+{% block jquery %}
+
+{% endblock jquery %}
+
+{% block footer %}
+    <span class="text-muted">Footer From Front Page.</span>
+{% endblock footer %}

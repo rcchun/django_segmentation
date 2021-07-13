@@ -1,0 +1,219 @@
+{% extends 'base.html'%}
+
+{% load static %}
+{% load base_tags %}
+
+{% block head %}
+
+{% endblock head %}
+
+{%  block nav %}
+    {% nav_bar %}
+{%  endblock nav %}
+
+{% block content %}
+
+<br>
+<div class="wrapper" style="padding-left: 30px; padding-right: 30px">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>{{ image.image }}</h2>
+        </div>
+        <div class="col-lg-3">
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-5.5">
+            <canvas id="canvas" class="absolute" style="border:2px solid gray;"></canvas>
+        </div>
+        <div style="clear:both;"></div>
+        <div class="col-lg-2">
+
+            <br>
+            <div class="card" style="width:300px;" >
+                <article class="card-group-item">
+                    <header class="card-header">
+                        <div class="row ">
+                            <div class="col-lg-9 align-self-end">
+                                <h5 class="title"> 보기 옵션 </h5>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="card-body">
+                        <div class="custom-control custom-checkbox">
+							<input type="checkbox" class="modelType" name="unet" value="unet" checked> UNet
+							<input type="checkbox" class="modelType" name="hed" value="hed"> HED
+                        </div>
+                    </div>
+                </article>
+                <div class="card-group-item">
+                    <article class="card-group">
+                        <div class="card">
+                            <header class="card-header"><h6 class="title"> 분석 결과 </h6></header>
+                            <div class="card-body">
+                                <h6><strong>Segmentation 이미지</strong></h6>
+                                <div>
+                                    <div class="custom-control custom-radio">
+										<input type="checkbox" class="chkType" name="mask" value="mask"> mask로 보기
+                                    </div>
+                                    <div class="custom-control custom-radio">
+										<input type="checkbox" class="chkType" name="contour" value="contour"> contour로 보기
+                                    </div>
+                                    <div class="custom-control custom-radio">
+										<input type="checkbox" class="chkType" name="maskContour" value="maskContour"> mask와 contour로 같이 보기
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <br>
+            <!--<div class="text-center" id="apply_wrapper">-->
+                <!--<button type="button" id="btn_apply" class="btn btn-outline-primary">적용</button>-->
+            <!--</div>-->
+        </div>
+        <div style="clear:both;"></div>
+        <div class="col-lg-3">
+            <table class="table" id="example-table-2">
+                <thead>
+                    <tr>
+                        <th> 영역 </th>
+                        <th> 면적 </th>
+                    </tr>
+                </thead>
+                <tbody id="ex_result">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
+
+
+</div>
+{% endblock content %}
+
+
+{% block jquery %}
+<script>
+$(document).ready(function(){
+
+	var range = $('.input-range'),
+		value = $('.range-value');
+	var img = new Image();
+	var canvas = document.getElementById('canvas');
+	d3.select('#chkbox_origin').property('checked', true);
+	canvas.width = 750;
+	canvas.height = 750;
+
+	var ctx = canvas.getContext('2d');
+	var folderNm = "{{image.image}}".split('/')[0];
+
+    var obj = "{{image.results}}".replace(/&#x27;/gi, '"');
+    var obj_hed = "{{image.results_hed}}".replace(/&#x27;/gi, '"');
+
+    var obj_transformed = JSON.parse(obj);
+    var obj_hed_transformed = JSON.parse(obj_hed);
+
+    var area_ind = obj_transformed.area_ind;
+    var area = obj_transformed.area;
+
+    var area_ind_hed = obj_hed_transformed.area_ind;
+    var area_hed = obj_hed_transformed.area;
+
+	var originImgUrl = "/media/" + folderNm + "/{{image.pk}}/UNET/Image.jpg";
+	img.src = originImgUrl;
+
+	//기본 image 호출
+	img.onload = function drawImage() {
+		ctx.drawImage(img,0, 0, canvas.width, canvas.height);
+	}
+
+	$(".chkType, .modelType").change(function(){
+		var isChecked = $('input[class="chkType"]:checked').length > 0;
+		var isModelChecked = $('input[class="modelType"]:checked').length > 0;
+		console.log(isChecked);
+
+		if(isChecked && isModelChecked) {
+			var isModelType = $("input:checkbox[class='modelType']:checked");
+			var chkType = $("input:checkbox[class='chkType']:checked").val();
+			var modelType =$("input:checkbox[class='modelType']:checked").val();
+			var modelObject = getModelUrlByChkType({
+				modelType: modelType,
+				chkType: chkType
+			});
+			if(modelType == 'unet'){
+			    var result = '';
+                for (i=0;i<area_ind.length;i++){
+                    result += '<tr>';
+                    result += '<td>'+area_ind[i]+'</td>';
+                    result += '<td>'+area[i]+'</td>';
+                    result += '</tr>';
+                }
+                $("#ex_result").empty();
+                $("#ex_result").append(result);
+			}
+			if(modelType == 'hed'){
+			    var result_hed = '';
+                for (i=0;i<area_ind_hed.length;i++){
+                    result_hed += '<tr>';
+                    result_hed += '<td>'+area_ind_hed[i]+'</td>';
+                    result_hed += '<td>'+area_hed[i]+'</td>';
+                    result_hed += '</tr>';
+                }
+                $("#ex_result").empty();
+                $("#ex_result").append(result_hed);
+			}
+
+			img.src = modelObject.url;
+		} else {
+			img.src = originImgUrl;
+		}
+	});
+
+	function getModelUrlByChkType(options) {
+	  var urls = {
+		unet: {
+		  mask: '/media/'+ folderNm +'/{{image.pk}}/UNET/mask_overlay.png',
+		  contour: '/media/'+ folderNm +'/{{image.pk}}/UNET/contour.png',
+		  maskContour:'/media/'+ folderNm +'/{{image.pk}}/UNET/maskContour.png'
+		},
+		hed: {
+		  mask: '/media/'+ folderNm +'/{{image.pk}}/HED/mask_overlay.png',
+		  contour: '/media/'+ folderNm +'/{{image.pk}}/HED/contour.png',
+		  maskContour: '/media/'+ folderNm +'/{{image.pk}}/HED/maskContour.png'
+		}
+	  };
+
+		var modelType = options.modelType || 'unet';
+		var chkType = options.chkType ;
+
+	  return {
+		url: urls[modelType][chkType]
+	  };
+	}
+
+	//하나만 선택할 수 있도록
+	$('input[type="checkbox"][class="chkType"]').click(function(){
+		if($(this).prop('checked')){
+			$('input[type="checkbox"][class="chkType"]').prop('checked',false);
+			$(this).prop('checked',true);
+		}
+	});
+	$('input[type="checkbox"][class="modelType"]').click(function(){
+		if($(this).prop('checked')){
+			$('input[type="checkbox"][class="modelType"]').prop('checked',false);
+			$(this).prop('checked',true);
+		}
+	});
+});
+</script>
+
+
+{% endblock jquery %}
+
+{% block footer %}
+    <span class="text-muted">Footer From Front Page.</span>
+{% endblock footer %}

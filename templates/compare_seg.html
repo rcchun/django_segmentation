@@ -1,0 +1,200 @@
+{% extends 'base.html'%}
+
+{% load staticfiles %}
+{% load base_tags %}
+
+{% block head %}
+<style>
+canvas.absolute {
+  border:2px solid gray;
+}
+</style>
+
+{% endblock head %}
+
+{%  block nav %}
+    {% nav_bar %}
+{%  endblock nav %}
+
+{% block content %}
+<div class="container">
+    <br>
+    <div class="row">
+        <h2>{{ image.image }}</h2>
+    </div>
+    <br><br>
+    {% if is_analyzed == False %}
+    <form method="POST" action="{% url 'compare_seg' image_pk %}" id="add_form" enctype="multipart/form-data">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="file"
+               name="seg_image"
+               id="seg_image" />
+        <button type="submit" form="add_form">Add</button>
+        <p>{{ image }}</p>
+    </form>
+    {% endif %}
+
+    {% if is_seg_gt == True %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <canvas id="canvas" class="absolute"></canvas>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <button type="button" id="btn_zoomin" class="btn btn-default btn-block"> Zoom in </button>
+                    </div>
+                    <div class="col-lg-6">
+                        <button type="button" id="btn_zoomout" class="btn btn-default btn-block"> Zoom out </button>
+                    </div>
+                </div>
+                <br>
+                <button type="button" id="btn_seg_result" class="btn btn-default btn-block"> Segmentation Result</button>
+                <br>
+                <button type="button" id="btn_seg_gt" class="btn btn-default btn-block"> Ground Truth </button>
+                <br>
+                <button type="button" id="btn_overlap" class="btn btn-default btn-block"> Overlap </button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}
+
+{% block jquery %}
+<script type="text/javascript" src="{% static "canvas/trackTransforms.js" %}"></script>
+<script>
+
+var img = [];
+var img_seg_result = new Image;
+var img_seg_gt = new Image;
+
+var canvas = document.getElementById('canvas');
+
+canvas.width = 800;
+canvas.height = 1000;
+var alpha = 1;
+
+img_seg_result.onload = function () {
+    var ctx = canvas.getContext('2d');
+
+    trackTransforms(ctx);
+    img.push(img_seg_result);
+
+    function redraw(img) {
+        var p1 = ctx.transformedPoint(0, 0);
+        var p2 = ctx.transformedPoint(canvas.width, canvas.height);
+        ctx.clearRect(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+
+        ctx.globalAlpha = alpha;
+
+        for (var i = 0; i < img.length; i++) {
+            ctx.drawImage(img[i], 0, 0);
+        }
+    }
+
+    redraw(img);
+
+    var lastX = canvas.width / 2,
+        lastY = canvas.height / 2;
+
+    var dragStart, dragged;
+
+    canvas.addEventListener('mousedown', function (evt) {
+        document.body.style.mozUserSelect = document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
+        lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
+        lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
+        dragStart = ctx.transformedPoint(lastX, lastY);
+        dragged = false;
+    }, false);
+
+    canvas.addEventListener('mousemove', function (evt) {
+        lastX = evt.offsetX || (evt.pageX - canvas.offsetLeft);
+        lastY = evt.offsetY || (evt.pageY - canvas.offsetTop);
+        dragged = true;
+        if (dragStart) {
+            var pt = ctx.transformedPoint(lastX, lastY);
+            ctx.translate(pt.x - dragStart.x, pt.y - dragStart.y);
+            redraw(img);
+        }
+    }, false);
+
+    canvas.addEventListener('mouseup', function (evt) {
+        dragStart = null;
+    }, false);
+
+    var scaleFactor = 1.1;
+
+    var zoom = function (clicks, is_btn) {
+        if (is_btn == true) {
+            var pt = ctx.transformedPoint(0, 0);
+        } else {
+            var pt = ctx.transformedPoint(lastX, lastY);
+        }
+        ctx.translate(pt.x, pt.y);
+        var factor = Math.pow(scaleFactor, clicks);
+        ctx.scale(factor, factor);
+        ctx.translate(-pt.x, -pt.y);
+        redraw(img);
+
+    }
+    $("#btn_zoomin").click(function (e) {
+        zoom(1, true);
+    })
+    $("#btn_zoomout").click(function (e) {
+        zoom(-1, true);
+    })
+
+    var handleScroll = function (evt) {
+        var delta = evt.wheelDelta ? evt.wheelDelta / 40 : evt.detail ? -evt.detail : 0;
+        if (delta) zoom(delta, false);
+        return evt.preventDefault() && false;
+    };
+
+    canvas.addEventListener('DOMMouseScroll', handleScroll, false);
+    canvas.addEventListener('mousewheel', handleScroll, false);
+    init()
+
+    function init() {
+        ctx.scale(0.1, 0.1)
+        redraw(img)
+    }
+    $("#btn_seg_result").click(function (e) {
+        img.splice(0, img.length);
+        img.push(img_seg_result);
+        alpha = 1
+        redraw(img)
+    });
+    $("#btn_seg_gt").click(function (e) {
+        img.splice(0, img.length);
+        img.push(img_seg_gt);
+        alpha = 1
+        redraw(img)
+    });
+    $("#btn_overlap").click(function (e) {
+        img.splice(0, img.length);
+        img.push(img_seg_result);
+        img.push(img_seg_gt);
+        alpha = 0.7
+        redraw(img)
+    })
+}
+
+img_seg_gt.src = '/media/{{seg_gt.seg_image}}';
+img_seg_result.src = '/media/{{seg_result.seg_image}}';
+
+
+</script>
+
+{% endblock jquery %}
+
+{% block footer %}
+    <span class="text-muted">Footer From Front Page.</span>
+{% endblock footer %}

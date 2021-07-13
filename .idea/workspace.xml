@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b04d17b2-0670-4cde-b8a5-d974dd2135b0" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1aeQCrZT7RCN1rXPenD5qGNRQHo" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="E:/경기ICT/GGICT" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b04d17b2-0670-4cde-b8a5-d974dd2135b0" name="Default Changelist" comment="" />
+      <created>1587093454304</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1587093454304</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2610" y="270" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1587363017850">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2610" y="270" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587363017850" />
+    <state x="2660" y="278" key="FileChooserDialogImpl" timestamp="1589512612959">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="278" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587093495038" />
+    <state x="2660" y="278" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1589512612959" />
+    <state x="664" y="348" key="com.intellij.ide.util.TipDialog" timestamp="1589244345477">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="664" y="348" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589244345477" />
+    <state x="2584" y="348" key="com.intellij.ide.util.TipDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1588554333307" />
+    <state x="581" y="361" width="1589" height="1026" key="dock-window-1" timestamp="1589180426494">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="581" y="361" width="1589" height="1026" key="dock-window-1/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589180426494" />
+    <state x="347" y="0" width="1589" height="1026" key="dock-window-1/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1588747615520" />
+    <state x="1916" y="0" width="1589" height="1026" key="dock-window-2" timestamp="1589173419506">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="1916" y="0" width="1589" height="1026" key="dock-window-2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1589173419506" />
+    <state x="-7" y="0" width="1603" height="1026" key="dock-window-2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1588753683317" />
+    <state x="953" y="0" width="974" height="1047" key="dock-window-3" timestamp="1587956074101">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="953" y="0" width="974" height="1047" key="dock-window-3/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1587956074101" />
+    <state x="956" y="0" width="971" height="1047" key="dock-window-3/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1587716365865" />
+    <state x="953" y="0" width="974" height="1047" key="dock-window-4" timestamp="1588147162109">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="953" y="0" width="974" height="1047" key="dock-window-4/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1588041966326" />
+    <state x="953" y="0" width="974" height="1047" key="dock-window-4/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1588147162109" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://E:/GGICT/crack-site/CrackViewer/views.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://E:/GGICT/crack-cls-detail/WebAnalyzer/models.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://E:/GGICT/crack-cls/WebAnalyzer/AnalysisModule/urls.py</url>
+          <line>15</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
